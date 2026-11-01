@@ -172,19 +172,25 @@
   .agree { display: flex; gap: .7rem; align-items: flex-start; font-weight: 400; font-size: .95rem; }
   .agree input { margin-top: .3rem; width: 1.1rem; height: 1.1rem; accent-color: var(--pulse); }
   .err { color: #B0113A; font-weight: 650; font-size: .92rem; min-height: 1.2em; margin: 0; }
-  .toast { position: fixed; left: 50%; bottom: 1.2rem; transform: translate(-50%, 140%); width: min(92vw, 420px); z-index: 50;
-    background: var(--white); color: var(--ink); border: 2px solid var(--ink); border-radius: 16px; padding: .85rem 1rem;
-    box-shadow: 5px 5px 0 var(--ink); display: flex; align-items: center; gap: .75rem; transition: transform .25s ease; }
-  .toast.show { transform: translate(-50%, 0); }
-  .toast .t-msg { flex: 1; font-weight: 650; font-size: .92rem; line-height: 1.3; }
-  .toast .t-msg small { display: block; font-weight: 400; color: var(--ink-soft); margin-top: .1rem; }
-  .toast .t-btn { border: 2px solid var(--ink); background: var(--sun); color: var(--ink); font: inherit; font-weight: 700; border-radius: 999px; padding: .4rem .85rem; cursor: pointer; white-space: nowrap; }
-  .toast .t-x { border: 0; background: none; font-size: 1.2rem; line-height: 1; cursor: pointer; color: var(--ink-soft); }
-  .toast.ok { background: #DFFBEA; }
-  .toast.bad { background: #FFE3EA; }
-  .toast .spin { width: 1.1rem; height: 1.1rem; border: 3px solid var(--mist); border-top-color: var(--pulse); border-radius: 50%; animation: tspin .8s linear infinite; flex: none; }
+  .toast { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem;
+    background: rgba(24, 27, 58, .35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    opacity: 0; transition: opacity .2s ease; }
+  .toast[hidden] { display: none; }
+  .toast.show { opacity: 1; }
+  .toast .box { position: relative; width: min(92vw, 380px); text-align: center; background: var(--white); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 22px; padding: 1.6rem 1.3rem 1.3rem; box-shadow: 6px 6px 0 var(--ink);
+    display: flex; flex-direction: column; align-items: center; gap: .8rem; transform: scale(.94); transition: transform .2s ease; }
+  .toast.show .box { transform: scale(1); }
+  .toast.ok .box { background: #DFFBEA; }
+  .toast.bad .box { background: #FFE3EA; }
+  .toast .t-ico { font-size: 2.2rem; line-height: 1; }
+  .toast .t-msg { font-weight: 750; font-size: 1.15rem; line-height: 1.25; }
+  .toast .t-msg small { display: block; font-weight: 400; font-size: .92rem; color: var(--ink-soft); margin-top: .35rem; }
+  .toast .t-btn { border: 2px solid var(--ink); background: var(--sun); color: var(--ink); font: inherit; font-weight: 700; border-radius: 999px; padding: .6rem 1.3rem; cursor: pointer; }
+  .toast .t-x { position: absolute; top: .4rem; right: .6rem; border: 0; background: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--ink-soft); }
+  .toast .spin { width: 2.2rem; height: 2.2rem; border: 4px solid var(--mist); border-top-color: var(--pulse); border-radius: 50%; animation: tspin .8s linear infinite; }
   @keyframes tspin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .toast { transition: none; } .toast .spin { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .toast, .toast .box { transition: none; } .toast .spin { animation: none; } }
   .done { background: var(--white); border: 2px solid var(--ink); border-radius: 24px; padding: 2rem; box-shadow: 8px 8px 0 var(--sun); display: grid; gap: .9rem; }
   .done[hidden], form.card[hidden] { display: none; }
   .link-box { word-break: break-all; padding: .7rem .9rem; background: var(--paper); border: 2px dashed var(--ink-soft); border-radius: 12px; font-size: .95rem; }
@@ -626,9 +632,11 @@
   /* ---------- form ---------- */
   var sel = document.getElementById('county');
   function fillSelect() {
+    var keep = sel.value;
     sel.textContent = '';
     var ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Prefer not to say'; sel.appendChild(ph);
     state.counties.forEach(function (c) { var o = document.createElement('option'); o.value = c.id; o.textContent = c.name; sel.appendChild(o); });
+    if (keep) sel.value = keep; else { var g = loadGiver(); if (g && g.county) sel.value = g.county; }
   }
   var form = document.getElementById('form'), done = document.getElementById('done'), err = document.getElementById('err');
   var statusEl = document.getElementById('status'), sub = document.getElementById('sub'), polling = false;
@@ -645,19 +653,48 @@
     clearTimeout(toastTimer);
     toastEl.className = 'toast ' + kind;
     toastEl.textContent = '';
-    if (kind === 'wait') { var sp = document.createElement('span'); sp.className = 'spin'; toastEl.appendChild(sp); }
+    var box = document.createElement('div'); box.className = 'box';
+    var ico;
+    if (kind === 'wait') { ico = document.createElement('span'); ico.className = 'spin'; }
+    else { ico = document.createElement('div'); ico.className = 't-ico'; ico.textContent = kind === 'ok' ? '\u2705' : '\u274C'; }
+    box.appendChild(ico);
     var m = document.createElement('div'); m.className = 't-msg'; m.textContent = msg;
     if (sub) { var sm = document.createElement('small'); sm.textContent = sub; m.appendChild(sm); }
-    toastEl.appendChild(m);
-    if (btnText) { var b = document.createElement('button'); b.type = 'button'; b.className = 't-btn'; b.textContent = btnText; b.addEventListener('click', function () { hideToast(); if (btnFn) btnFn(); }); toastEl.appendChild(b); }
-    var x = document.createElement('button'); x.type = 'button'; x.className = 't-x'; x.setAttribute('aria-label', 'Close'); x.textContent = '\u00d7'; x.addEventListener('click', hideToast); toastEl.appendChild(x);
+    box.appendChild(m);
+    if (btnText) { var b = document.createElement('button'); b.type = 'button'; b.className = 't-btn'; b.textContent = btnText; b.addEventListener('click', function () { hideToast(); if (btnFn) btnFn(); }); box.appendChild(b); }
+    var x = document.createElement('button'); x.type = 'button'; x.className = 't-x'; x.setAttribute('aria-label', 'Close'); x.textContent = '\u00d7'; x.addEventListener('click', hideToast); box.appendChild(x);
+    toastEl.appendChild(box);
     toastEl.hidden = false;
     requestAnimationFrame(function () { toastEl.classList.add('show'); });
     if (autoHideMs) toastTimer = setTimeout(hideToast, autoHideMs);
   }
+  toastEl.addEventListener('click', function (e) { if (e.target === toastEl) hideToast(); });
   function hideToast() { clearTimeout(toastTimer); toastEl.classList.remove('show'); setTimeout(function () { if (!toastEl.classList.contains('show')) toastEl.hidden = true; }, 300); }
   function goToCard() { done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); }
 
+  // Remember what a returning giver filled in (this browser only), so the next give is one tap.
+  // A field they left empty stays empty. Saved only after a payment actually went through.
+  var MEMKEY = 'b19_giver';
+  function loadGiver() { try { return JSON.parse(localStorage.getItem(MEMKEY)) || null; } catch (e) { return null; } }
+  function saveGiver() {
+    try {
+      localStorage.setItem(MEMKEY, JSON.stringify({
+        amount: form.elements.amount.value, county: form.elements.county.value, nick: form.elements.nick.value,
+        ig: form.elements.ig.value, phone: form.elements.phone.value
+      }));
+    } catch (e) {}
+  }
+  function fillGiver() {
+    var g = loadGiver(); if (!g) return false;
+    ['amount', 'county', 'nick', 'ig', 'phone'].forEach(function (k) {
+      if (g[k] != null && form.elements[k]) form.elements[k].value = g[k];
+    });
+    form.elements.agree.checked = true; // they already confirmed this once
+    var a = parseInt(form.elements.amount.value, 10);
+    sub.textContent = 'Give KES ' + (a >= 3 ? a : 3);
+    return true;
+  }
+  fillGiver();
   function stop(msg) { polling = false; sub.disabled = false; statusEl.textContent = ''; err.textContent = msg; }
 
   // Only the amount and the phone are needed. Name, Instagram and county can all stay empty.
@@ -696,22 +733,22 @@
       api('/checkout/status/' + ref).then(function (r) {
         var s = r.data && r.data.status;
         if (s === 'paid') return finish(r.data, dropped, phone);
-        if (s === 'failed') { toast('bad', 'Payment failed', 'Nothing was charged. You can try again.', null, null, 10000); return stop('The payment did not go through. Nothing was charged. You can try again.'); }
-        if (tries >= 80) { toast('bad', 'Still waiting', 'If you did pay, use "Get my card back" in a minute.', null, null, 12000); return stop(LATE); }
+        if (s === 'failed') { toast('bad', 'Payment failed', 'Nothing was charged. You can try again.', 'Try again', null); return stop('The payment did not go through. Nothing was charged. You can try again.'); }
+        if (tries >= 80) { toast('bad', 'Still waiting', 'If you did pay, use "Get my card back" in a minute.', null, null); return stop(LATE); }
         setTimeout(poll, 1500);
       }).catch(function () { if (tries >= 80) stop(LATE); else setTimeout(poll, 1500); });
     })();
   }
   function finish(st, dropped, phone) {
     if (!st || st.status !== 'paid' || !st.person_number) return stop('Waiting for the payment to be confirmed.');
-    polling = false; sub.disabled = false; statusEl.textContent = '';
+    polling = false; sub.disabled = false; statusEl.textContent = ''; saveGiver();
     var fb = { person_number: st.person_number, name: form.elements.nick.value.trim(), county_id: Number(form.elements.county.value || 0), total_kes: parseInt(form.elements.amount.value, 10) || 0 };
     post('/card', { phone: phone }).then(function (r) { return r.ok ? r.data : fb; }, function () { return fb; })
-      .then(function (d) { showDone(toCard(d), st.referral_code, dropped); toast('ok', 'Payment successful', 'Thank you. Your card is ready.', 'Go to my card', goToCard, 15000); refresh(); setTimeout(refresh, 6500); });
+      .then(function (d) { showDone(toCard(d), st.referral_code, dropped); toast('ok', 'Payment successful', 'Thank you. Your card is ready.', 'Go to my card', goToCard); refresh(); setTimeout(refresh, 6500); });
   }
 
   document.getElementById('again').addEventListener('click', function () {
-    form.reset(); sub.textContent = 'Give KES 3'; err.textContent = ''; statusEl.textContent = '';
+    form.reset(); sub.textContent = 'Give KES 3'; err.textContent = ''; statusEl.textContent = ''; fillGiver();
     done.hidden = true; form.hidden = false; form.elements.amount.focus();
   });
   document.getElementById('rbtn').addEventListener('click', function () {
