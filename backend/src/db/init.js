@@ -89,6 +89,23 @@ async function ensureDatabase() {
     }
     // Small upgrade for databases built by an older schema.sql. Adding a column never touches existing data.
     await client.query('ALTER TABLE backers ADD COLUMN IF NOT EXISTS invoice_id VARCHAR(40)');
+    // Extra lock for hosts that offer a public web API on the database (Supabase does). With row level security on
+    // and no rules, outsiders see nothing, not even phone numbers. Your server connects as the table owner, so it is
+    // not affected. Safe to repeat on every start.
+    await client.query(`
+      DO $$
+      DECLARE r record;
+      BEGIN
+        FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
+          EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', r.tablename);
+        END LOOP;
+        FOR r IN SELECT viewname FROM pg_views WHERE schemaname = 'public' LOOP
+          BEGIN
+            EXECUTE format('ALTER VIEW public.%I SET (security_invoker = true)', r.viewname);
+          EXCEPTION WHEN OTHERS THEN NULL; -- older Postgres without this option
+          END;
+        END LOOP;
+      END $$;`);
   } finally {
     client.release();
   }
