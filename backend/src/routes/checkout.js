@@ -103,11 +103,11 @@ router.post('/checkout', checkoutLimit, async (req, res, next) => {
 });
 
 // Asks IntaSend how one payment went. The answer goes through the same checks as the webhook.
-// Returns true when IntaSend answered. At most one question per payment every 2.5 seconds.
+// Returns true when IntaSend answered. At most one question per payment every 1.2 seconds.
 const lastAsk = new Map();
 async function checkWithIntaSend(ref, invoiceId) {
   const now = Date.now();
-  if (now - (lastAsk.get(ref) || 0) < 2500) return false;
+  if (now - (lastAsk.get(ref) || 0) < 1200) return false;
   lastAsk.set(ref, now);
   if (lastAsk.size > 5000) for (const [k, t] of lastAsk) if (now - t > 600000) lastAsk.delete(k);
   return askIntaSend(ref, invoiceId);

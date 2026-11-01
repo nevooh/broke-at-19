@@ -172,6 +172,19 @@
   .agree { display: flex; gap: .7rem; align-items: flex-start; font-weight: 400; font-size: .95rem; }
   .agree input { margin-top: .3rem; width: 1.1rem; height: 1.1rem; accent-color: var(--pulse); }
   .err { color: #B0113A; font-weight: 650; font-size: .92rem; min-height: 1.2em; margin: 0; }
+  .toast { position: fixed; left: 50%; bottom: 1.2rem; transform: translate(-50%, 140%); width: min(92vw, 420px); z-index: 50;
+    background: var(--white); color: var(--ink); border: 2px solid var(--ink); border-radius: 16px; padding: .85rem 1rem;
+    box-shadow: 5px 5px 0 var(--ink); display: flex; align-items: center; gap: .75rem; transition: transform .25s ease; }
+  .toast.show { transform: translate(-50%, 0); }
+  .toast .t-msg { flex: 1; font-weight: 650; font-size: .92rem; line-height: 1.3; }
+  .toast .t-msg small { display: block; font-weight: 400; color: var(--ink-soft); margin-top: .1rem; }
+  .toast .t-btn { border: 2px solid var(--ink); background: var(--sun); color: var(--ink); font: inherit; font-weight: 700; border-radius: 999px; padding: .4rem .85rem; cursor: pointer; white-space: nowrap; }
+  .toast .t-x { border: 0; background: none; font-size: 1.2rem; line-height: 1; cursor: pointer; color: var(--ink-soft); }
+  .toast.ok { background: #DFFBEA; }
+  .toast.bad { background: #FFE3EA; }
+  .toast .spin { width: 1.1rem; height: 1.1rem; border: 3px solid var(--mist); border-top-color: var(--pulse); border-radius: 50%; animation: tspin .8s linear infinite; flex: none; }
+  @keyframes tspin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .toast { transition: none; } .toast .spin { animation: none; } }
   .done { background: var(--white); border: 2px solid var(--ink); border-radius: 24px; padding: 2rem; box-shadow: 8px 8px 0 var(--sun); display: grid; gap: .9rem; }
   .done[hidden], form.card[hidden] { display: none; }
   .link-box { word-break: break-all; padding: .7rem .9rem; background: var(--paper); border: 2px dashed var(--ink-soft); border-radius: 12px; font-size: .95rem; }
@@ -298,8 +311,8 @@
   <section class="block" id="join" style="background: var(--white); border-block: 2px solid var(--ink);">
     <div class="wrap join">
       <div class="join-copy">
-        <h2>Give 3 bob and get your card</h2>
-        <p class="lede">You land on the wall with your county, and you get a premium card with your number to download and post. Give once, give ten times. Every give goes to the top of the wall.</p>
+        <h2>Give 3 bob or more and get your card</h2>
+        <p class="lede"><b>3 bob is the minimum, not the limit.</b> You can give KES 5, 10, 50 or any amount you like, as long as it is KES 3 or more. You land on the wall with your county, and you get a premium card with your number to download and post. Give once, give ten times. Every give goes to the top of the wall.</p>
         <p class="hint">Pay with M-Pesa through IntaSend. No login. Your phone number is your ID, like a very small government.</p>
       </div>
 
@@ -309,7 +322,7 @@
             <div class="row">
               <label for="amount">Amount in KES</label>
               <input id="amount" name="amount" type="number" min="3" step="1" value="3" inputmode="numeric" required>
-              <span class="hint">Minimum KES 3. Give as many times as you like.</span>
+              <span class="hint">Minimum KES 3. You can give more: 5, 10, 50, any amount. Give as many times as you like.</span>
             </div>
             <div class="row">
               <label for="county">County <span class="hint">(optional)</span></label>
@@ -625,6 +638,25 @@
   function toCard(d) {
     return { no: d.person_number, name: d.name || '', cc: d.county_id ? (NAMES[d.county_id] || '') : '', kes: Number(d.total_kes) || 0 };
   }
+  // Pop-up notice at the bottom of the screen: waiting / paid / failed.
+  var toastEl = document.getElementById('toast'), toastTimer = null;
+  function toast(kind, msg, sub, btnText, btnFn, autoHideMs) {
+    clearTimeout(toastTimer);
+    toastEl.className = 'toast ' + kind;
+    toastEl.textContent = '';
+    if (kind === 'wait') { var sp = document.createElement('span'); sp.className = 'spin'; toastEl.appendChild(sp); }
+    var m = document.createElement('div'); m.className = 't-msg'; m.textContent = msg;
+    if (sub) { var sm = document.createElement('small'); sm.textContent = sub; m.appendChild(sm); }
+    toastEl.appendChild(m);
+    if (btnText) { var b = document.createElement('button'); b.type = 'button'; b.className = 't-btn'; b.textContent = btnText; b.addEventListener('click', function () { hideToast(); if (btnFn) btnFn(); }); toastEl.appendChild(b); }
+    var x = document.createElement('button'); x.type = 'button'; x.className = 't-x'; x.setAttribute('aria-label', 'Close'); x.textContent = '\u00d7'; x.addEventListener('click', hideToast); toastEl.appendChild(x);
+    toastEl.hidden = false;
+    requestAnimationFrame(function () { toastEl.classList.add('show'); });
+    if (autoHideMs) toastTimer = setTimeout(hideToast, autoHideMs);
+  }
+  function hideToast() { clearTimeout(toastTimer); toastEl.classList.remove('show'); setTimeout(function () { if (!toastEl.classList.contains('show')) toastEl.hidden = true; }, 300); }
+  function goToCard() { done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); }
+
   function stop(msg) { polling = false; sub.disabled = false; statusEl.textContent = ''; err.textContent = msg; }
 
   // Only the amount and the phone are needed. Name, Instagram and county can all stay empty.
@@ -650,11 +682,12 @@
     post('/checkout', body).then(function (r) {
       if (r.status !== 202) { stop(r.data.error || 'Something went wrong. Try again.'); return; }
       statusEl.textContent = 'Check your phone and enter your M-Pesa PIN. Waiting for the payment...';
+      toast('wait', 'Check your phone', 'Enter your M-Pesa PIN. We are waiting for the payment...');
       waitForPayment(r.data.api_ref, r.data.dropped || [], form.elements.phone.value);
     }).catch(function () { stop("Can't reach the server. Check your internet and try again."); });
   });
 
-  // The server hears from M-Pesa through the webhook. We ask it every 3 seconds, for up to 2 minutes.
+  // The server hears from M-Pesa through the webhook. We ask it every 1.5 seconds, for up to 2 minutes.
   function waitForPayment(ref, dropped, phone) {
     var tries = 0, LATE = 'Still waiting. If you did pay, use "Get my card back" below in a minute.';
     (function poll() {
@@ -662,10 +695,10 @@
       api('/checkout/status/' + ref).then(function (r) {
         var s = r.data && r.data.status;
         if (s === 'paid') return finish(r.data, dropped, phone);
-        if (s === 'failed') return stop('The payment did not go through. Nothing was charged. You can try again.');
-        if (tries >= 40) return stop(LATE);
-        setTimeout(poll, 3000);
-      }).catch(function () { if (tries >= 40) stop(LATE); else setTimeout(poll, 3000); });
+        if (s === 'failed') { toast('bad', 'Payment failed', 'Nothing was charged. You can try again.', null, null, 10000); return stop('The payment did not go through. Nothing was charged. You can try again.'); }
+        if (tries >= 80) { toast('bad', 'Still waiting', 'If you did pay, use "Get my card back" in a minute.', null, null, 12000); return stop(LATE); }
+        setTimeout(poll, 1500);
+      }).catch(function () { if (tries >= 80) stop(LATE); else setTimeout(poll, 1500); });
     })();
   }
   function finish(st, dropped, phone) {
@@ -673,7 +706,7 @@
     polling = false; sub.disabled = false; statusEl.textContent = '';
     var fb = { person_number: st.person_number, name: form.elements.nick.value.trim(), county_id: Number(form.elements.county.value || 0), total_kes: parseInt(form.elements.amount.value, 10) || 0 };
     post('/card', { phone: phone }).then(function (r) { return r.ok ? r.data : fb; }, function () { return fb; })
-      .then(function (d) { showDone(toCard(d), st.referral_code, dropped); refresh(); setTimeout(refresh, 6500); });
+      .then(function (d) { showDone(toCard(d), st.referral_code, dropped); toast('ok', 'Payment successful', 'Thank you. Your card is ready.', 'Go to my card', goToCard, 15000); refresh(); setTimeout(refresh, 6500); });
   }
 
   document.getElementById('again').addEventListener('click', function () {
@@ -700,5 +733,6 @@
   setInterval(function () { if (!document.hidden) refresh(); }, 20000);
 })();
 </script>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>
