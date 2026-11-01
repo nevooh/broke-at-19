@@ -1,0 +1,19 @@
+{
+  "name": "broke-at-19-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Broke at 19: backend for the 1 million x KES 3 experiment",
+  "main": "server.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:init": "node src/db/init.js",
+    "db:reset": "node src/db/reset.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

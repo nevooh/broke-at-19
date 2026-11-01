@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broke at 19</title>
+<meta name="description" content="A 19-year-old developer asking 1 million people for KES 3 each. It started as a joke.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F1F2FA;
+    --ink: #181B3A;
+    --ink-soft: #4A4E73;
+    --pulse: #3D4DFF;
+    --bubble: #FF6F9C;
+    --sun: #FFD23F;
+    --mist: #DADDF2;
+    --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--pulse); outline-offset: 3px; border-radius: 6px; }
+  .wrap { width: min(1120px, 100% - 2rem); margin-inline: auto; }
+  .lede { max-width: 56ch; color: var(--ink-soft); }
+  h1, h2, h3 { line-height: 1.04; letter-spacing: -0.02em; margin: 0; }
+  h1 { font-size: clamp(2.35rem, 5.6vw, 4.4rem); font-weight: 750; font-variation-settings: "wdth" 88; }
+  h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 720; font-variation-settings: "wdth" 90; }
+  h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+  .block { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .block-head { margin-bottom: 2rem; display: grid; gap: .75rem; }
+
+  /* Header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.1rem; }
+  .brand { display: inline-flex; align-items: center; gap: .6rem; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; text-decoration: none; }
+  .sticker {
+    display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%;
+    background: var(--sun); border: 2px solid var(--ink); font-size: .95rem; font-weight: 800;
+    transform: rotate(-8deg);
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: .55rem; padding: .45rem .9rem .45rem .7rem;
+    border-radius: 999px; background: var(--white); border: 2px solid var(--ink);
+    font-weight: 650; font-size: .95rem; font-variant-numeric: tabular-nums;
+  }
+  .live { width: .6rem; height: .6rem; border-radius: 50%; background: var(--bubble); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    padding: .95rem 1.6rem; border-radius: 999px; border: 2px solid var(--ink);
+    font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; color: var(--ink);
+    background: transparent; transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-main { background: var(--sun); box-shadow: 4px 4px 0 var(--ink); }
+  .btn-main:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn-main:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+  .btn-quiet:hover { background: var(--white); }
+
+  /* Hero */
+  .hero { display: grid; gap: clamp(2rem, 5vw, 4rem); padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 7vw, 5rem); align-items: center; }
+  @media (min-width: 900px) { .hero { grid-template-columns: 1.05fr 1fr; } }
+  .hero-copy { display: grid; gap: 1.4rem; justify-items: start; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+
+  .field {
+    background: var(--white); border: 2px solid var(--ink); border-radius: 28px;
+    padding: clamp(1rem, 2.4vw, 1.5rem); box-shadow: 8px 8px 0 var(--ink);
+  }
+  .dots { display: grid; grid-template-columns: repeat(40, 1fr); gap: 3px; }
+  .dot { aspect-ratio: 1; border-radius: 50%; background: var(--mist); }
+  .dot.on { background: var(--pulse); }
+  .dot.first { background: var(--bubble); }
+  .dot.latest { background: var(--pulse); box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--bubble); }
+  @media (prefers-reduced-motion: no-preference) {
+    .dot.latest { animation: ping 1.6s ease-in-out infinite; }
+    @keyframes ping { 50% { transform: scale(1.5); } }
+  }
+  .field-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; margin-top: 1.1rem; }
+  .big { font-size: clamp(2.6rem, 6vw, 3.8rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .field-note { color: var(--ink-soft); font-size: .95rem; max-width: 24ch; margin: 0; }
+
+  /* Split */
+  .split-bar { display: flex; height: 2rem; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--white); }
+  .split-bar span { flex: 1; }
+  .split-bar span + span { border-left: 2px solid var(--ink); }
+  .s1 { background: var(--pulse); } .s2 { background: var(--bubble); } .s3 { background: var(--sun); } .s4 { background: var(--ink); }
+  .split-list { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 800px) { .split-list { grid-template-columns: repeat(4, 1fr); } }
+  .split-list li { display: grid; gap: .4rem; align-content: start; }
+  .split-list p { margin: 0; color: var(--ink-soft); font-size: .98rem; }
+  .pct { display: inline-flex; align-items: center; gap: .5rem; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; }
+  .swatch { width: .9rem; height: .9rem; border-radius: 50%; border: 2px solid var(--ink); }
+  .fine { margin-top: 2rem; padding-top: 1.25rem; border-top: 2px solid var(--mist); color: var(--ink-soft); font-size: .95rem; max-width: 70ch; }
+
+  /* Journey + countries */
+  .two { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); }
+  @media (min-width: 900px) { .two { grid-template-columns: 1.2fr 1fr; align-items: start; } }
+  .rail { list-style: none; margin: 0; padding: 0; }
+  .rail li { position: relative; padding: 0 0 2rem 2.6rem; }
+  .rail li:last-child { padding-bottom: 0; }
+  .rail li::before { content: ""; position: absolute; left: .35rem; top: 1.7rem; bottom: -.2rem; width: 3px; background: var(--mist); border-radius: 3px; }
+  .rail li:last-child::before { display: none; }
+  .rail li::after {
+    content: ""; position: absolute; left: 0; top: .35rem; width: 1.1rem; height: 1.1rem; border-radius: 50%;
+    background: var(--paper); border: 3px solid var(--ink-soft);
+  }
+  .rail li.now::after { background: var(--pulse); border-color: var(--ink); width: 1.25rem; height: 1.25rem; left: -.07rem; }
+  .m-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem; }
+  .m-num { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .m-prize { font-weight: 650; }
+  .rail p { margin: .15rem 0 0; color: var(--ink-soft); font-size: .98rem; }
+  .meter { height: .7rem; margin-top: .7rem; background: var(--mist); border-radius: 999px; overflow: hidden; max-width: 22rem; }
+  .meter i { display: block; height: 100%; background: var(--pulse); border-radius: 999px; }
+  .rail .later .m-num, .rail .later .m-prize { color: var(--ink-soft); }
+  .proof { margin-top: 2rem; max-width: 52ch; }
+
+  .race { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .race li { display: grid; grid-template-columns: 2rem 1fr auto; gap: .2rem .75rem; align-items: center; }
+  .race .flag { font-size: 1.5rem; line-height: 1; }
+  .race .name { font-weight: 650; }
+  .race .n { font-weight: 750; font-variant-numeric: tabular-nums; }
+  .race .bar { grid-column: 2 / 4; height: .6rem; background: var(--mist); border-radius: 999px; overflow: hidden; }
+  .race .bar i { display: block; height: 100%; background: var(--pulse); border-radius: 999px; }
+  .race li:first-child .bar i { background: var(--bubble); }
+  .race-note { color: var(--ink-soft); font-size: .95rem; margin: 1.25rem 0 0; }
+
+  /* Wall */
+  .wall { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .wall li {
+    display: inline-flex; align-items: baseline; gap: .5rem; padding: .5rem .9rem; border-radius: 999px;
+    background: var(--white); border: 2px solid var(--ink); font-size: .98rem;
+  }
+  .wall .no { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .wall .ig { color: var(--pulse); font-weight: 650; text-decoration: none; }
+  .wall .ig:hover { text-decoration: underline; }
+  .wall li.me { background: var(--bubble); }
+  .wall li.me .ig { color: var(--ink); }
+
+  /* Join */
+  .join { display: grid; gap: clamp(2rem, 5vw, 4rem); }
+  @media (min-width: 900px) { .join { grid-template-columns: 1fr 1.1fr; align-items: start; } }
+  .join-copy { display: grid; gap: 1rem; align-content: start; }
+  form.card { background: var(--white); border: 2px solid var(--ink); border-radius: 24px; padding: clamp(1.25rem, 3vw, 2rem); display: grid; gap: 1.2rem; box-shadow: 8px 8px 0 var(--bubble); }
+  .row { display: grid; gap: .4rem; }
+  .row2 { display: grid; gap: 1.2rem; }
+  @media (min-width: 560px) { .row2 { grid-template-columns: 1fr 1fr; } }
+  label, legend { font-weight: 650; font-size: .98rem; }
+  .hint { color: var(--ink-soft); font-size: .88rem; font-weight: 400; }
+  input[type=text], input[type=number], input[type=tel], select {
+    width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 2px solid var(--ink);
+    border-radius: 14px; padding: .75rem .9rem;
+  }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .5rem; }
+  .pay { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .pay label { position: relative; }
+  .pay input { position: absolute; opacity: 0; inset: 0; }
+  .pay span { display: block; text-align: center; padding: .75rem; border: 2px solid var(--ink); border-radius: 14px; background: var(--paper); font-weight: 650; cursor: pointer; }
+  .pay input:checked + span { background: var(--ink); color: var(--white); }
+  .pay input:focus-visible + span { outline: 3px solid var(--pulse); outline-offset: 3px; }
+  .agree { display: flex; gap: .7rem; align-items: flex-start; font-weight: 400; font-size: .95rem; }
+  .agree input { margin-top: .3rem; width: 1.1rem; height: 1.1rem; accent-color: var(--pulse); }
+  .err { color: #B0113A; font-weight: 650; font-size: .92rem; min-height: 1.2em; margin: 0; }
+  .done { background: var(--white); border: 2px solid var(--ink); border-radius: 24px; padding: 2rem; box-shadow: 8px 8px 0 var(--sun); display: grid; gap: .9rem; }
+  .done[hidden], form.card[hidden] { display: none; }
+  .link-box { word-break: break-all; padding: .7rem .9rem; background: var(--paper); border: 2px dashed var(--ink-soft); border-radius: 12px; font-size: .95rem; }
+
+  /* Widget demo */
+  .hero > *, .two > *, .join > *, .widget-demo > * { min-width: 0; }
+  .widget-demo { display: grid; gap: 2rem; }
+  @media (min-width: 900px) { .widget-demo { grid-template-columns: 1fr 1fr; align-items: center; } }
+  .appframe { position: relative; height: 15rem; border: 2px solid var(--ink); border-radius: 22px; background: var(--white); overflow: hidden; }
+  .appframe::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2.4rem; background: var(--mist); }
+  .appframe .ghost { position: absolute; left: 1.2rem; right: 1.2rem; height: .8rem; border-radius: 99px; background: var(--mist); }
+  .appframe .ghost:nth-of-type(1) { top: 4rem; width: 55%; }
+  .appframe .ghost:nth-of-type(2) { top: 5.6rem; width: 80%; }
+  .appframe .ghost:nth-of-type(3) { top: 7.2rem; width: 40%; }
+  .appframe .chip { position: absolute; right: .9rem; bottom: .9rem; font-size: .85rem; padding: .35rem .75rem .35rem .6rem; }
+  pre.code { margin: 0; padding: 1.1rem 1.25rem; background: var(--ink); color: #E7E9FF; border-radius: 18px; overflow-x: auto; font-size: .9rem; line-height: 1.6; }
+
+  footer { border-top: 2px solid var(--ink); padding-block: 2rem 3rem; color: var(--ink-soft); font-size: .93rem; }
+  footer p { margin: 0 0 .6rem; max-width: 80ch; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .top-chips { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; }
+  /* crypto-style balance: dark, green, glowing, tabular digits */
+  :root { --gain: #2BFF88; --gain-dim: #1FA865; --vault: #0B1F14; }
+  .chip.ticker { background: var(--vault); color: var(--gain); border-color: var(--ink); gap: .55rem; padding-block: .4rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; font-weight: 700;
+    box-shadow: 0 0 0 2px var(--ink), 0 0 16px rgba(43, 255, 136, .35); }
+  .ticker .up { font-size: .7rem; }
+  .ticker .bal { font-size: 1.02rem; letter-spacing: -.01em; text-shadow: 0 0 10px rgba(43, 255, 136, .55); }
+  .ticker .pct { font-size: .74rem; font-weight: 600; color: var(--vault); background: var(--gain); border-radius: 999px; padding: .12rem .5rem; }
+  .where { background: var(--vault); color: var(--gain); border: 2px solid var(--ink); border-radius: 20px; padding: 1.1rem 1.25rem;
+    box-shadow: 6px 6px 0 var(--ink), 0 0 26px rgba(43, 255, 136, .25); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .where .hint { color: #7FD6A8; }
+  .where .big { color: var(--gain); text-shadow: 0 0 18px rgba(43, 255, 136, .5); letter-spacing: -.02em; }
+  .where .goal-bar { background: #12301F; border-color: var(--gain-dim); }
+  .where .goal-bar i { background: linear-gradient(90deg, var(--gain-dim), var(--gain)); box-shadow: 0 0 12px var(--gain); }
+  .where .gain { color: var(--gain); font-weight: 700; }
+  @media (prefers-reduced-motion: no-preference) {
+    .flash { animation: tick .9s ease-out; }
+    @keyframes tick { 0% { filter: brightness(1.9); transform: scale(1.03); } 100% { filter: none; transform: none; } }
+  }
+  .btn[hidden] { display: none; }
+  .where { display: grid; gap: .45rem; min-width: min(100%, 18rem); }
+  .goal-bar { height: .9rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--white); overflow: hidden; }
+  .goal-bar i { display: block; height: 100%; width: 0; background: var(--sun); transition: width .6s ease; }
+  .race .rk { font-weight: 800; font-size: 1.1rem; text-align: center; color: var(--ink-soft); }
+  .wall .cty { color: var(--ink-soft); font-size: .85rem; }
+  .cardbox { display: grid; gap: .9rem; justify-items: start; }
+  .cardbox canvas { width: min(100%, 340px); height: auto; border-radius: 18px; border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+  .cardbtns { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .recover { margin-top: 1.75rem; display: grid; gap: .6rem; }
+  .recover .rr { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .recover input { flex: 1; min-width: 11rem; }
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <a class="brand" href="#top" id="top"><span class="sticker" aria-hidden="true">3</span>broke at 19</a>
+  <div class="top-chips"><span class="chip ticker" aria-live="polite"><span class="up" aria-hidden="true">&#9650;</span><span class="bal">KES <b data-cash>0</b></span><span class="pct"><b data-pct>0</b>% of KES 3M</span></span><span class="chip" aria-live="polite"><span class="live" aria-hidden="true"></span><span><b data-count>0</b> people</span></span></div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <h1>I'm 19, I build software, and I'm asking 1 million people for 3 bob each.</h1>
+      <p class="lede">It started as a joke: if 1 million people gave you 3 bob each, you'd have 3 million. So here's the page. If it works, I get an unfair head start in business and build more products than my age-mates. Who cares. I'll be 3 million richer, you'll be 3 bob poorer, and we both survive.</p>
+      <div class="hero-actions">
+        <a class="btn btn-main" href="#join">Give KES 3</a>
+        <a class="btn btn-quiet" href="#wall">See the wall</a>
+      </div>
+    </div>
+
+    <div class="field" aria-label="Progress toward the first 1,000 people">
+      <div class="dots" id="dots" role="img" aria-label="1,000 dots. Each filled dot is one person."></div>
+      <div class="field-foot">
+        <div class="where">
+          <span class="hint">Where we are</span>
+          <div><span class="big">KES <b data-cash>0</b></span> <span class="hint">of KES 3,000,000</span></div>
+          <div class="goal-bar" aria-hidden="true"><i id="goalfill"></i></div>
+          <span class="hint"><span class="gain">&#9650; <b data-pct>0</b>%</span> of the goal &middot; <b data-count>0</b> people</span>
+        </div>
+        <p class="field-note">Each dot is a person who gave 3 bob. Yes, it's working.</p>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- County race -->
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <h2>County race</h2>
+        <p class="lede">Pick your county when you give. Let's see who shows up, and who has to explain to their neighbours.</p>
+      </div>
+      <ul class="race" id="race" style="max-width:40rem"></ul>
+      <p class="race-note">All 47 counties are in. Top 10 shown. Counts are paid people only.</p>
+    </div>
+  </section>
+
+  <!-- Wall -->
+  <section class="block" id="wall" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="block-head">
+        <h2>The wall</h2>
+        <p class="lede">Every give, newest first. Gave twice? You are on the wall twice. Names and Instagram are optional.</p>
+      </div>
+      <ul class="wall" id="wall"></ul>
+    </div>
+  </section>
+
+  <!-- Thanks -->
+  <section class="block" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="block-head">
+        <h2>Okay, joke aside</h2>
+        <p class="lede">If you gave 3 bob, thank you. I mean it. You don't know me, and you still believed in a silly idea. I won't forget it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join -->
+  <section class="block" id="join" style="background: var(--white); border-block: 2px solid var(--ink);">
+    <div class="wrap join">
+      <div class="join-copy">
+        <h2>Give 3 bob and get your card</h2>
+        <p class="lede">You land on the wall with your county, and you get a premium card with your number to download and post. Give once, give ten times. Every give goes to the top of the wall.</p>
+        <p class="hint">Pay with M-Pesa through IntaSend. No login. Your phone number is your ID, like a very small government.</p>
+      </div>
+
+      <div>
+        <form class="card" id="form" novalidate>
+          <div class="row2">
+            <div class="row">
+              <label for="amount">Amount in KES</label>
+              <input id="amount" name="amount" type="number" min="3" step="1" value="3" inputmode="numeric" required>
+              <span class="hint">Minimum KES 3. Give as many times as you like.</span>
+            </div>
+            <div class="row">
+              <label for="county">County <span class="hint">(optional)</span></label>
+              <select id="county" name="county" required></select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="row">
+              <label for="nick">Name or nickname <span class="hint">(optional)</span></label>
+              <input id="nick" name="nick" type="text" maxlength="40" autocomplete="off">
+            </div>
+            <div class="row">
+              <label for="ig">Instagram handle <span class="hint">(optional)</span></label>
+              <input id="ig" name="ig" type="text" maxlength="31" placeholder="handle, not a link" autocomplete="off">
+            </div>
+          </div>
+          <div class="row">
+            <label for="phone">M-Pesa phone number</label>
+            <input id="phone" name="phone" type="tel" placeholder="0712 345 678" autocomplete="tel">
+            <span class="hint">This number is tied to your number, so you can get your card back later.</span>
+          </div>
+          <label class="agree"><input type="checkbox" id="agree" required>
+            <span>I understand this is a gift, not an investment. It goes to a 19-year-old's business and life.</span></label>
+          <p class="hint" id="status" role="status"></p>
+          <p class="err" id="err" role="alert"></p>
+          <button class="btn btn-main" type="submit" id="sub">Give KES 3</button>
+        </form>
+
+        <div class="done" id="done" hidden>
+          <h3 style="font-size:1.6rem">You're person #<span id="done-no"></span></h3>
+          <div class="cardbox">
+            <canvas id="card" width="1080" height="1350" aria-label="Your card"></canvas>
+            <div class="cardbtns">
+              <button class="btn btn-main" type="button" id="dl">Download card</button>
+              <button class="btn btn-quiet" type="button" id="share" hidden>Share</button>
+            </div>
+          </div>
+          <p class="lede" style="margin:0">Thank you, truly. You just helped a 19-year-old turn a joke into something real. Post your card anywhere, and give again whenever you like.</p>
+          <p class="hint" id="done-linkhint" style="margin:0">Your own link. Every friend who gives through it is counted for you:</p>
+          <div class="link-box" id="done-link"></div>
+          <button class="btn btn-quiet" type="button" id="again">Give again</button>
+          <p class="hint" id="dropnote" style="margin:0"></p>
+        </div>
+
+        <div class="recover">
+          <h3>Already gave? Get your card back</h3>
+          <div class="rr">
+            <input id="rphone" type="tel" placeholder="0712 345 678" aria-label="Phone number you paid with">
+            <button class="btn btn-quiet" type="button" id="rbtn">Show my card</button>
+          </div>
+          <p class="err" id="rerr" role="alert"></p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Corner widget -->
+  <section class="block">
+    <div class="wrap widget-demo">
+      <div>
+        <div class="block-head">
+          <h2>The corner counter</h2>
+          <p class="lede">A tiny live number I can drop into any of my apps. Same backend, a few lines of code.</p>
+        </div>
+        <pre class="code" tabindex="0"><code>fetch('/api/count')
+  .then(r =&gt; r.json())
+  .then(d =&gt; badge.textContent = 'KES ' + d.total_kes + ' · ' + d.people + ' people');</code></pre>
+      </div>
+      <div class="appframe" aria-hidden="true">
+        <span class="ghost"></span><span class="ghost"></span><span class="ghost"></span>
+        <span class="chip"><span class="live"></span><span>KES <b data-cash>0</b> · <b data-count>0</b> people</span></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Terms:</b> you give 3 bob, I say thank you. That is the whole contract.</p>
+    <p><b>Honest odds:</b> will this hit 1 million? Probably not. That's the experiment.</p>
+    <p>This is a gift, not an investment or a sale. Payment fees come out of each payment.</p>
+    <p>Gifts are paid by M-Pesa through IntaSend.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var TOTAL_CELLS = 1000;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var GOAL = 1000000, GOAL_CASH = 3000000;
+  var state = { count: 0, cash: 0, counties: [], wall: [], race: [] };
+  var NAMES = {};   // county number -> county name
+  var CACHE = 'b19_last';
+  // Friend link: ?r=code. We pass it on to checkout so the friend who sent you gets counted.
+  var REF = (function () { var r = new URLSearchParams(location.search).get('r'); return r && /^[a-z0-9]{8}$/.test(r) ? r : null; })();
+  function api(path, opts) {
+    return fetch('/api' + path, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, status: r.status, data: d }; });
+    });
+  }
+  function post(path, body) {
+    return api(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  }
+
+  /* ---------- dots ---------- */
+  var dotsEl = document.getElementById('dots');
+  var dots = [];
+  for (var i = 0; i < TOTAL_CELLS; i++) {
+    var d = document.createElement('span');
+    d.className = 'dot';
+    dotsEl.appendChild(d);
+    dots.push(d);
+  }
+  var shown = 0;
+  function paintDots(n) {
+    n = Math.min(n, TOTAL_CELLS);
+    for (var i = 0; i < TOTAL_CELLS; i++) {
+      var on = i < n;
+      var cls = 'dot' + (on ? ' on' : '') + (i === 0 && on ? ' first' : '') + (i === n - 1 && n > 1 ? ' latest' : '');
+      if (dots[i].className !== cls) dots[i].className = cls;
+    }
+  }
+  function setCounts(n) {
+    document.querySelectorAll('[data-count]').forEach(function (el) { el.textContent = n.toLocaleString('en-US'); });
+  }
+  function animateTo(target) {
+    var from = shown;
+    if (reduce || target === from) { shown = target; paintDots(shown); setCounts(shown); return; }
+    var t0 = null, dur = 1000;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      shown = Math.round(from + (target - from) * e);
+      paintDots(shown); setCounts(shown);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- cash (shows at once) ---------- */
+  var lastCash = null;
+  function setCash() {
+    document.querySelectorAll('[data-cash]').forEach(function (el) { el.textContent = state.cash.toLocaleString('en-US'); });
+    if (lastCash !== null && state.cash > lastCash) {
+      document.querySelectorAll('.ticker, .where').forEach(function (el) {
+        el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+      });
+    }
+    lastCash = state.cash;
+    var pct = Math.min(100, state.cash / GOAL_CASH * 100);
+    document.getElementById('goalfill').style.width = (state.cash > 0 ? Math.max(0.6, pct) : 0) + '%';
+    document.querySelectorAll('[data-pct]').forEach(function (el) { el.textContent = pct < 10 ? pct.toFixed(1) : Math.round(pct); });
+  }
+
+  /* ---------- county race ---------- */
+  function renderRace() {
+    var race = document.getElementById('race');
+    race.textContent = '';
+    if (!state.race.length) {
+      var e = document.createElement('li'); e.style.display = 'block';
+      e.textContent = 'No gives yet. Your county could be first.'; race.appendChild(e); return;
+    }
+    var max = state.race[0].n;
+    state.race.forEach(function (r, i) {
+      var li = document.createElement('li');
+      var rk = document.createElement('span'); rk.className = 'rk'; rk.textContent = i + 1;
+      var nm = document.createElement('span'); nm.className = 'name'; nm.textContent = r.name;
+      var n = document.createElement('span'); n.className = 'n'; n.textContent = r.n.toLocaleString('en-US');
+      var bar = document.createElement('div'); bar.className = 'bar';
+      var fill = document.createElement('i'); fill.style.width = ((r.n / max) * 100).toFixed(1) + '%';
+      bar.appendChild(fill);
+      li.appendChild(rk); li.appendChild(nm); li.appendChild(n); li.appendChild(bar);
+      race.appendChild(li);
+    });
+  }
+
+  /* ---------- wall: every give, newest first ---------- */
+  function renderWall() {
+    var wall = document.getElementById('wall');
+    wall.textContent = '';
+    if (!state.wall.length) {
+      var e = document.createElement('li'); e.textContent = 'Nobody yet. Be the first.'; wall.appendChild(e); return;
+    }
+    state.wall.forEach(function (b) {
+      var li = document.createElement('li');
+      var no = document.createElement('span'); no.className = 'no'; no.textContent = '#' + b.person_number;
+      var nm = document.createElement('span'); nm.textContent = b.name;
+      var ct = document.createElement('span'); ct.className = 'cty';
+      ct.textContent = (b.county_id && NAMES[b.county_id] ? NAMES[b.county_id] + ' · ' : '') + 'KES ' + b.amount_kes;
+      li.appendChild(no); li.appendChild(nm); li.appendChild(ct);
+      if (b.instagram_handle) {
+        var a = document.createElement('a'); a.className = 'ig';
+        a.href = 'https://instagram.com/' + encodeURIComponent(b.instagram_handle);
+        a.target = '_blank'; a.rel = 'noopener noreferrer nofollow';
+        a.textContent = '@' + b.instagram_handle;
+        li.appendChild(a);
+      }
+      wall.appendChild(li);
+    });
+  }
+
+  /* ---------- load real numbers from the server ---------- */
+  var PHONE_RE = /^(?:\+?254|0)?[17]\d{8}$/;
+  function loadCounties() {
+    return api('/counties').then(function (r) {
+      if (!r.ok) return;
+      state.counties = r.data;
+      r.data.forEach(function (c) { NAMES[c.id] = c.name; });
+      fillSelect();
+    });
+  }
+  function refresh() {
+    return Promise.all([api('/count'), api('/wall?limit=24'), api('/leaderboard')]).then(function (a) {
+      if (a[0].ok) {
+        state.count = a[0].data.people; state.cash = a[0].data.total_kes;
+        setCash(); animateTo(state.count);
+        try { localStorage.setItem(CACHE, JSON.stringify({ c: state.cash, p: state.count })); } catch (e) {}
+      }
+      if (a[1].ok) { state.wall = a[1].data; renderWall(); }
+      if (a[2].ok) {
+        state.race = a[2].data.filter(function (r) { return r.county_id !== 0 && NAMES[r.county_id]; }).slice(0, 10)
+          .map(function (r) { return { name: NAMES[r.county_id], n: r.backers }; });
+        renderRace();
+      }
+    }).catch(function () {});
+  }
+
+  /* ---------- premium card ---------- */
+  var canvas = document.getElementById('card'), cur = null;
+  function rr(c, x, y, w, h, r) {
+    c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+  }
+  function drawCard(b) {
+    var c = canvas.getContext('2d'), W = 1080, H = 1350;
+    var g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#181B3A'); g.addColorStop(1, '#2B31A8');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(255,255,255,.07)';
+    for (var y = 40; y < H; y += 48) for (var x = 40; x < W; x += 48) { c.beginPath(); c.arc(x, y, 5, 0, 7); c.fill(); }
+    c.strokeStyle = '#FFD23F'; c.lineWidth = 6; rr(c, 50, 50, W - 100, H - 100, 40); c.stroke();
+    c.lineWidth = 2; rr(c, 76, 76, W - 152, H - 152, 28); c.stroke();
+    function tx(t, yy, size, color, wt) {
+      c.font = wt + ' ' + size + 'px "Bricolage Grotesque", system-ui, sans-serif';
+      c.fillStyle = color; c.textAlign = 'center'; c.fillText(t, W / 2, yy);
+    }
+    tx('BROKE AT 19', 200, 48, '#FFD23F', 800);
+    tx(b.no <= 1000 ? 'ONE OF THE FIRST 1,000' : 'ONE OF THE MILLION', 262, 34, '#DADDF2', 600);
+    var t = '#' + b.no.toLocaleString('en-US');
+    tx(t, 540, Math.min(300, Math.floor(860 / (t.length * 0.6))), '#FFFFFF', 800);
+    tx('of ' + GOAL.toLocaleString('en-US') + ' people', 640, 42, '#DADDF2', 600);
+    if (b.cc) tx(b.cc + ' County', 720, 44, '#FFD23F', 700);
+    if (b.kes) tx('KES ' + b.kes.toLocaleString('en-US') + ' given', 810, 58, '#FFFFFF', 750);
+    c.fillStyle = '#FFD23F'; c.fillRect(W / 2 - 60, 860, 120, 6);
+    var name = b.name || '';
+    if (name) {
+      tx('SPECIAL THANKS TO', 930, 32, '#DADDF2', 600);
+      tx(name, 1015, Math.min(88, Math.floor(860 / (name.length * 0.55))), '#FFFFFF', 750);
+    } else {
+      tx('Thank you', 1010, 96, '#FFFFFF', 750);
+    }
+    tx('Sincere thanks for taking part in the challenge', 1110, 36, '#DADDF2', 500);
+    tx('and helping a dream come true.', 1160, 36, '#DADDF2', 500);
+    tx(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '  ·  1 million people, 3 bob each', 1230, 28, '#9AA0D6', 500);
+  }
+  function showDone(b, code, dropped) {
+    cur = b;
+    var fl = document.fonts ? document.fonts.load('800 40px "Bricolage Grotesque"') : Promise.resolve();
+    fl.then(function () { drawCard(b); }, function () { drawCard(b); });
+    document.getElementById('done-no').textContent = b.no.toLocaleString('en-US');
+    var linkEl = document.getElementById('done-link');
+    linkEl.textContent = location.origin + location.pathname + '?r=' + code;
+    linkEl.style.display = document.getElementById('done-linkhint').style.display = code ? '' : 'none';
+    var LABEL = { name: 'name', ig: 'Instagram handle' };
+    document.getElementById('dropnote').textContent = dropped && dropped.length
+      ? 'We left out your ' + dropped.map(function (k) { return LABEL[k]; }).join(' and ') + ' because it did not pass our checks. Your gift still counted.' : '';
+    form.hidden = true; done.hidden = false;
+    done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  }
+  function cardBlob(cb) { canvas.toBlob(cb, 'image/png'); }
+  document.getElementById('dl').addEventListener('click', function () {
+    cardBlob(function (bl) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(bl);
+      a.download = 'broke-at-19-backer-' + cur.no + '.png'; a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    });
+  });
+  var shareBtn = document.getElementById('share');
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [new File([''], 'a.png', { type: 'image/png' })] })) shareBtn.hidden = false;
+  } catch (e) {}
+  shareBtn.addEventListener('click', function () {
+    cardBlob(function (bl) {
+      var f = new File([bl], 'broke-at-19-backer-' + cur.no + '.png', { type: 'image/png' });
+      navigator.share({ files: [f], text: "I'm person #" + cur.no + ' on Broke at 19. I gave 3 bob.' }).catch(function () {});
+    });
+  });
+
+  /* ---------- form ---------- */
+  var sel = document.getElementById('county');
+  function fillSelect() {
+    sel.textContent = '';
+    var ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Prefer not to say'; sel.appendChild(ph);
+    state.counties.forEach(function (c) { var o = document.createElement('option'); o.value = c.id; o.textContent = c.name; sel.appendChild(o); });
+  }
+  var form = document.getElementById('form'), done = document.getElementById('done'), err = document.getElementById('err');
+  var statusEl = document.getElementById('status'), sub = document.getElementById('sub'), polling = false;
+  form.elements.amount.addEventListener('input', function () {
+    var a = parseInt(form.elements.amount.value, 10);
+    sub.textContent = 'Give KES ' + (a >= 3 ? a : 3);
+  });
+  function toCard(d) {
+    return { no: d.person_number, name: d.name || '', cc: d.county_id ? (NAMES[d.county_id] || '') : '', kes: Number(d.total_kes) || 0 };
+  }
+  function stop(msg) { polling = false; sub.disabled = false; statusEl.textContent = ''; err.textContent = msg; }
+
+  // Only the amount and the phone are needed. Name, Instagram and county can all stay empty.
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (polling) return;
+    err.textContent = ''; statusEl.textContent = '';
+    var amount = parseInt(form.elements.amount.value, 10);
+    if (!(amount >= 3)) { err.textContent = 'The minimum is KES 3.'; form.elements.amount.focus(); return; }
+    if (!PHONE_RE.test(form.elements.phone.value.replace(/\s+/g, ''))) {
+      err.textContent = 'Enter a valid M-Pesa number, like 0712 345 678.'; form.elements.phone.focus(); return;
+    }
+    if (!form.elements.agree.checked) { err.textContent = 'Please confirm that this is a gift.'; form.elements.agree.focus(); return; }
+
+    var body = { amount: amount, phone: form.elements.phone.value };
+    if (form.elements.county.value !== '') body.county = Number(form.elements.county.value);
+    if (form.elements.nick.value.trim()) body.nick = form.elements.nick.value.trim();
+    var ig = form.elements.ig.value.trim().replace(/^@/, ''); if (ig) body.ig = ig;
+    if (REF) body.ref = REF;
+
+    sub.disabled = true; polling = true;
+    statusEl.textContent = 'Sending the M-Pesa prompt to your phone...';
+    post('/checkout', body).then(function (r) {
+      if (r.status !== 202) { stop(r.data.error || 'Something went wrong. Try again.'); return; }
+      statusEl.textContent = 'Check your phone and enter your M-Pesa PIN. Waiting for the payment...';
+      waitForPayment(r.data.api_ref, r.data.dropped || [], form.elements.phone.value);
+    }).catch(function () { stop("Can't reach the server. Check your internet and try again."); });
+  });
+
+  // The server hears from M-Pesa through the webhook. We ask it every 3 seconds, for up to 2 minutes.
+  function waitForPayment(ref, dropped, phone) {
+    var tries = 0, LATE = 'Still waiting. If you did pay, use "Get my card back" below in a minute.';
+    (function poll() {
+      tries += 1;
+      api('/checkout/status/' + ref).then(function (r) {
+        var s = r.data && r.data.status;
+        if (s === 'paid') return finish(r.data, dropped, phone);
+        if (s === 'failed') return stop('The payment did not go through. Nothing was charged. You can try again.');
+        if (tries >= 40) return stop(LATE);
+        setTimeout(poll, 3000);
+      }).catch(function () { if (tries >= 40) stop(LATE); else setTimeout(poll, 3000); });
+    })();
+  }
+  function finish(st, dropped, phone) {
+    if (!st || st.status !== 'paid' || !st.person_number) return stop('Waiting for the payment to be confirmed.');
+    polling = false; sub.disabled = false; statusEl.textContent = '';
+    var fb = { person_number: st.person_number, name: form.elements.nick.value.trim(), county_id: Number(form.elements.county.value || 0), total_kes: parseInt(form.elements.amount.value, 10) || 0 };
+    post('/card', { phone: phone }).then(function (r) { return r.ok ? r.data : fb; }, function () { return fb; })
+      .then(function (d) { showDone(toCard(d), st.referral_code, dropped); refresh(); setTimeout(refresh, 6500); });
+  }
+
+  document.getElementById('again').addEventListener('click', function () {
+    form.reset(); sub.textContent = 'Give KES 3'; err.textContent = ''; statusEl.textContent = '';
+    done.hidden = true; form.hidden = false; form.elements.amount.focus();
+  });
+  document.getElementById('rbtn').addEventListener('click', function () {
+    var rerr = document.getElementById('rerr'), v = document.getElementById('rphone').value;
+    if (!PHONE_RE.test(v.replace(/\s+/g, ''))) { rerr.textContent = 'Enter the number you paid with, like 0712 345 678.'; return; }
+    rerr.textContent = 'Looking...';
+    post('/card', { phone: v }).then(function (r) {
+      if (!r.ok) { rerr.textContent = r.data.error || 'Something went wrong. Try again.'; return; }
+      rerr.textContent = ''; showDone(toCard(r.data), null, []);
+    }).catch(function () { rerr.textContent = "Can't reach the server. Try again."; });
+  });
+
+  /* ---------- start: show last known numbers at once, then ask the server ---------- */
+  try {
+    var last = JSON.parse(localStorage.getItem(CACHE));
+    if (last) { state.cash = last.c; state.count = last.p; shown = last.p; setCash(); paintDots(shown); setCounts(shown); }
+  } catch (e) {}
+  fillSelect();
+  loadCounties().catch(function () {}).then(refresh);
+  setInterval(function () { if (!document.hidden) refresh(); }, 20000);
+})();
+</script>
+</body>
+</html>
