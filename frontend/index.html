@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Broke at 19</title>
-<meta name="description" content="A 19-year-old developer asking 1 million people for KES 3 each. It started as a joke.">
+<meta name="description" content="A 19-year-old developer asking 3 million people for KES 1 each. It started as a joke.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
@@ -248,7 +248,7 @@
 <body>
 
 <header class="wrap top">
-  <a class="brand" href="#top" id="top"><span class="sticker" aria-hidden="true">3</span>broke at 19</a>
+  <a class="brand" href="#top" id="top"><span class="sticker" aria-hidden="true">1</span>broke at 19</a>
   <div class="top-chips"><span class="chip ticker" aria-live="polite"><span class="up" aria-hidden="true">&#9650;</span><span class="bal">KES <b data-cash>0</b></span><span class="pct"><b data-pct>0</b>% of KES 3M</span></span><span class="chip" aria-live="polite"><span class="live" aria-hidden="true"></span><span><b data-count>0</b> people</span></span></div>
 </header>
 
@@ -256,10 +256,11 @@
   <!-- Hero -->
   <section class="wrap hero">
     <div class="hero-copy">
-      <h1>I'm 19, I build software, and I'm asking 1 million people for 3 bob each.</h1>
-      <p class="lede">It started as a joke: if 1 million people gave you 3 bob each, you'd have 3 million. So here's the page. If it works, I get an unfair head start in business and build more products than my age-mates. Who cares. I'll be 3 million richer, you'll be 3 bob poorer, and we both survive.</p>
+      <h1>I'm 19, I build software, and I'm asking 3 million people for 1 shilling each.</h1>
+      <p class="lede">It started as a joke: if 3 million people gave you 1 shilling each, you'd have 3 million. So here's the page. If it works, I get an unfair head start in business and build more products than my age-mates. Who cares. I'll be 3 million richer, you'll be 1 shilling poorer, and we both survive.</p>
+      <p class="lede" style="margin-top:.9rem">Behind this joke is a real person in a hard season, still choosing to build. Your 1 shilling is not just a laugh. It is a hand on my back. Thank you.</p>
       <div class="hero-actions">
-        <a class="btn btn-main" href="#join">Give KES 3</a>
+        <a class="btn btn-main" href="#join">Give KES 1</a>
         <a class="btn btn-quiet" href="#wall">See the wall</a>
       </div>
     </div>
@@ -273,7 +274,7 @@
           <div class="goal-bar" aria-hidden="true"><i id="goalfill"></i></div>
           <span class="hint"><span class="gain">&#9650; <b data-pct>0</b>%</span> of the goal &middot; <b data-count>0</b> people</span>
         </div>
-        <p class="field-note">Each dot is a person who gave 3 bob. Yes, it's working.</p>
+        <p class="field-note">Each dot is a person who gave 1 shilling. Yes, it's working.</p>
       </div>
     </div>
   </section>
@@ -308,7 +309,7 @@
     <div class="wrap">
       <div class="block-head">
         <h2>Okay, joke aside</h2>
-        <p class="lede">If you gave 3 bob, thank you. I mean it. You don't know me, and you still believed in a silly idea. I won't forget it.</p>
+        <p class="lede">If you gave 1 shilling, thank you. I mean it. You don't know me, and you still believed in a silly idea. I won't forget it.</p>
       </div>
     </div>
   </section>
@@ -317,8 +318,8 @@
   <section class="block" id="join" style="background: var(--white); border-block: 2px solid var(--ink);">
     <div class="wrap join">
       <div class="join-copy">
-        <h2>Give 3 bob or more and get your card</h2>
-        <p class="lede"><b>3 bob is the minimum, not the limit.</b> You can give KES 5, 10, 50 or any amount you like, as long as it is KES 3 or more. You land on the wall with your county, and you get a premium card with your number to download and post. Give once, give ten times. Every give goes to the top of the wall.</p>
+        <h2>Give 1 shilling or more and get your card</h2>
+        <p class="lede"><b>1 shilling is the minimum, not the limit.</b> You can give KES 5, 10, 50 or any amount you like, as long as it is KES 1 or more. You land on the wall with your county, and you get a premium card with your number to download and post. Give once, give ten times. Every give goes to the top of the wall.</p>
         <p class="hint">Pay with M-Pesa through IntaSend. No login. Your phone number is your ID, like a very small government.</p>
       </div>
 
@@ -327,8 +328,8 @@
           <div class="row2">
             <div class="row">
               <label for="amount">Amount in KES</label>
-              <input id="amount" name="amount" type="number" min="3" step="1" value="3" inputmode="numeric" required>
-              <span class="hint">Minimum KES 3. You can give more: 5, 10, 50, any amount. Give as many times as you like.</span>
+              <input id="amount" name="amount" type="number" min="1" step="1" value="1" inputmode="numeric" required>
+              <span class="hint">Minimum KES 1. You can give more: 5, 10, 50, any amount. Give as many times as you like.</span>
             </div>
             <div class="row">
               <label for="county">County <span class="hint">(optional)</span></label>
@@ -354,7 +355,8 @@
             <span>I understand this is a gift, not an investment. It goes to a 19-year-old's business and life.</span></label>
           <p class="hint" id="status" role="status"></p>
           <p class="err" id="err" role="alert"></p>
-          <button class="btn btn-main" type="submit" id="sub">Give KES 3</button>
+          <button class="btn btn-main" type="submit" id="sub">Give KES 1</button>
+          <p class="hint" style="margin-top:.7rem">A joke on the outside. A real life on the inside. Thank you for helping it move.</p>
         </form>
 
         <div class="done" id="done" hidden>
@@ -408,8 +410,8 @@
 
 <footer>
   <div class="wrap">
-    <p><b>Terms:</b> you give 3 bob, I say thank you. That is the whole contract.</p>
-    <p><b>Honest odds:</b> will this hit 1 million? Probably not. That's the experiment.</p>
+    <p><b>Terms:</b> you give 1 shilling, I say thank you. That is the whole contract.</p>
+    <p><b>Honest odds:</b> will this hit 3 million? Probably not. That's the experiment.</p>
     <p>This is a gift, not an investment or a sale. Payment fees come out of each payment.</p>
     <p>Gifts are paid by M-Pesa through IntaSend.</p>
   </div>
@@ -421,7 +423,7 @@
   var TOTAL_CELLS = 1000;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var GOAL = 1000000, GOAL_CASH = 3000000;
+  var GOAL = 3000000, GOAL_CASH = 3000000;
   var state = { count: 0, cash: 0, counties: [], wall: [], race: [] };
   var NAMES = {};   // county number -> county name
   var CACHE = 'b19_last';
@@ -578,7 +580,7 @@
       c.fillStyle = color; c.textAlign = 'center'; c.fillText(t, W / 2, yy);
     }
     tx('BROKE AT 19', 200, 48, '#FFD23F', 800);
-    tx(b.no <= 1000 ? 'ONE OF THE FIRST 1,000' : 'ONE OF THE MILLION', 262, 34, '#DADDF2', 600);
+    tx(b.no <= 1000 ? 'ONE OF THE FIRST 1,000' : 'ONE OF THE 3 MILLION', 262, 34, '#DADDF2', 600);
     var t = '#' + b.no.toLocaleString('en-US');
     tx(t, 540, Math.min(300, Math.floor(860 / (t.length * 0.6))), '#FFFFFF', 800);
     tx('of ' + GOAL.toLocaleString('en-US') + ' people', 640, 42, '#DADDF2', 600);
@@ -594,7 +596,7 @@
     }
     tx('Sincere thanks for taking part in the challenge', 1110, 36, '#DADDF2', 500);
     tx('and helping a dream come true.', 1160, 36, '#DADDF2', 500);
-    tx(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '  ·  1 million people, 3 bob each', 1230, 28, '#9AA0D6', 500);
+    tx(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '  ·  3 million people, 1 shilling each', 1230, 28, '#9AA0D6', 500);
   }
   function showDone(b, code, dropped) {
     cur = b;
@@ -625,7 +627,7 @@
   shareBtn.addEventListener('click', function () {
     cardBlob(function (bl) {
       var f = new File([bl], 'broke-at-19-backer-' + cur.no + '.png', { type: 'image/png' });
-      navigator.share({ files: [f], text: "I'm person #" + cur.no + ' on Broke at 19. I gave 3 bob.' }).catch(function () {});
+      navigator.share({ files: [f], text: "I'm person #" + cur.no + ' on Broke at 19. I gave 1 shilling.' }).catch(function () {});
     });
   });
 
@@ -642,7 +644,7 @@
   var statusEl = document.getElementById('status'), sub = document.getElementById('sub'), polling = false;
   form.elements.amount.addEventListener('input', function () {
     var a = parseInt(form.elements.amount.value, 10);
-    sub.textContent = 'Give KES ' + (a >= 3 ? a : 3);
+    sub.textContent = 'Give KES ' + (a >= 1 ? a : 1);
   });
   function toCard(d) {
     return { no: d.person_number, name: d.name || '', cc: d.county_id ? (NAMES[d.county_id] || '') : '', kes: Number(d.total_kes) || 0 };
@@ -691,7 +693,7 @@
     });
     form.elements.agree.checked = true; // they already confirmed this once
     var a = parseInt(form.elements.amount.value, 10);
-    sub.textContent = 'Give KES ' + (a >= 3 ? a : 3);
+    sub.textContent = 'Give KES ' + (a >= 1 ? a : 1);
     return true;
   }
   fillGiver();
@@ -703,7 +705,7 @@
     if (polling) return;
     err.textContent = ''; statusEl.textContent = '';
     var amount = parseInt(form.elements.amount.value, 10);
-    if (!(amount >= 3)) { err.textContent = 'The minimum is KES 3.'; form.elements.amount.focus(); return; }
+    if (!(amount >= 1)) { err.textContent = 'The minimum is KES 1.'; form.elements.amount.focus(); return; }
     if (!PHONE_RE.test(form.elements.phone.value.replace(/\s+/g, ''))) {
       err.textContent = 'Enter a valid M-Pesa number, like 0712 345 678.'; form.elements.phone.focus(); return;
     }
@@ -748,7 +750,7 @@
   }
 
   document.getElementById('again').addEventListener('click', function () {
-    form.reset(); sub.textContent = 'Give KES 3'; err.textContent = ''; statusEl.textContent = ''; fillGiver();
+    form.reset(); sub.textContent = 'Give KES 1'; err.textContent = ''; statusEl.textContent = ''; fillGiver();
     done.hidden = true; form.hidden = false; form.elements.amount.focus();
   });
   document.getElementById('rbtn').addEventListener('click', function () {

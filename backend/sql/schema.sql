@@ -1,5 +1,5 @@
 -- Broke at 19: database schema (PostgreSQL)
--- Every gift is KES 3 or more, paid by M-Pesa. Amounts are whole shillings.
+-- Every gift is KES 1 or more, paid by M-Pesa. Amounts are whole shillings.
 
 -- Backers: one row per gift.
 -- A row is created as 'pending' when checkout starts, and only counts
@@ -15,7 +15,7 @@ CREATE TABLE backers (
                      CHECK (county_id BETWEEN 0 AND 47),
     referral_code    VARCHAR(12) NOT NULL UNIQUE, -- this backer's own share link code
     referred_by      BIGINT REFERENCES backers(id),
-    amount_kes       INTEGER NOT NULL CHECK (amount_kes >= 3),
+    amount_kes       INTEGER NOT NULL CHECK (amount_kes >= 1),
     provider         VARCHAR(20) NOT NULL DEFAULT 'intasend',
     payment_ref      VARCHAR(100) UNIQUE,         -- our reference sent to IntaSend (idempotency)
     invoice_id       VARCHAR(40),                 -- IntaSend's own id for this payment (we ask IntaSend about it)

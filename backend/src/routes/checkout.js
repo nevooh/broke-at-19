@@ -7,7 +7,7 @@ const { cleanName, cleanHandle } = require('../services/moderation');
 const { isValidCounty } = require('../services/counties');
 const rateLimit = require('../middleware/rateLimit');
 
-const MIN_KES = 3;
+const MIN_KES = 1;
 const MAX_KES = 250000; // the most one M-Pesa payment can carry
 const REF_PATTERN = /^b19_[a-f0-9]{16}$/;
 
