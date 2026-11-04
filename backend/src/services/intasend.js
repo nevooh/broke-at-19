@@ -17,7 +17,8 @@ async function post(path, body) {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'User-Agent': 'BrokeAt19/1.0 (+https://broke-at-19.onrender.com)',
+      // IntaSend's Cloudflare blocks non-browser User-Agents (curl, bare Node, custom names).
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36',
       Authorization: `Bearer ${process.env.INTASEND_SECRET_KEY}`,
     },
     body: JSON.stringify(body),
