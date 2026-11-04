@@ -30,6 +30,14 @@ async function post(path, body) {
   if (!res.ok) {
     const err = new Error(`IntaSend ${path} returned ${res.status}`);
     err.details = data;
+    // Diagnostics for Cloudflare blocks: its ray id, its verdict header, and the IP we are calling from.
+    err.details.cf_ray = res.headers.get('cf-ray');
+    err.details.cf_mitigated = res.headers.get('cf-mitigated');
+    err.details.status = res.status;
+    try {
+      const ipRes = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(4000) });
+      err.details.our_outbound_ip = (await ipRes.json()).ip;
+    } catch { err.details.our_outbound_ip = 'lookup failed'; }
     throw err;
   }
   return data;
