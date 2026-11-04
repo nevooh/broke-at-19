@@ -17,6 +17,7 @@ async function post(path, body) {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'User-Agent': 'BrokeAt19/1.0 (+https://broke-at-19.onrender.com)',
       Authorization: `Bearer ${process.env.INTASEND_SECRET_KEY}`,
     },
     body: JSON.stringify(body),
