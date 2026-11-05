@@ -12,6 +12,7 @@ router.post('/webhook/intasend', async (req, res) => {
   if (!expected) return res.status(503).json({ error: 'Webhook is disabled: no challenge is set.' });
 
   const b = req.body || {};
+  console.log('WEBHOOK', new Date().toISOString(), b.api_ref, b.state, b.value, b.currency);
   if (!safeEqual(b.challenge || '', expected)) return res.sendStatus(401);
 
   const ref = String(b.api_ref || '');
